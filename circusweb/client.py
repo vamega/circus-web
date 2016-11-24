@@ -81,7 +81,7 @@ class AsynchronousCircusClient(CircusClient):
                 self.loop.remove_timeout(timeout)
                 stream.stop_on_recv()
                 stream.close()
-                callback(json.loads(msg[0]))
+                callback(json.loads(msg[0].decode('utf-8')))
 
             stream.on_recv(recv_callback)
 
@@ -91,7 +91,7 @@ class AsynchronousCircusClient(CircusClient):
             raise CallError(str(e))
 
         if not callback:
-            return json.loads(socket.recv())
+            return json.loads(socket.recv().decode('utf-8'))
 
     @gen.coroutine
     def update_watchers(self):
